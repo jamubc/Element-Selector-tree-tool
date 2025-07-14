@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      6.0
 // @description  Press Ctrl+E to get developer-friendly CSS selectors for any element
-// @author       You
+// @author       jamubc
 // @match        *://*/*
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
