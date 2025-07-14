@@ -4,6 +4,14 @@
 
 A powerful userscript that provides developer-friendly CSS selectors for any DOM element with visual highlighting and hierarchical tree view.
 
+<table>
+  <tr>
+    <td><img width="402" alt="Highlighting an element and displaying its CSS selector" src="https://github.com/user-attachments/assets/2765c219-abba-444a-9d0f-6a8559bf468a"></td>
+    <td><img width="414" alt="Hierarchical tree view of DOM elements" src="https://github.com/user-attachments/assets/80d7c2ea-f892-481b-94b3-33a8ec841523"></td>
+  </tr>
+</table>
+
+
 ## Features
 
 - **Smart Selector Generation**: Prioritizes reliable selectors (ID → data attributes → unique classes → semantic attributes)
