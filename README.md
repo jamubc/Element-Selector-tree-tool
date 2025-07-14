@@ -14,11 +14,10 @@ A powerful userscript that provides developer-friendly CSS selectors for any DOM
 
 ## Features
 
-- **Smart Selector Generation**: Prioritizes reliable selectors (ID → data attributes → unique classes → semantic attributes)
-- **Visual Element Highlighting**: Precise border overlay with responsive positioning
-- **Interactive Tree View**: Shows element hierarchy with syntax highlighting
 - **One-Click Copy**: Click any highlighted element to copy its selector to clipboard
-- **Keyboard Toggle**: Press `Ctrl+E` to activate/deactivate selector mode
+- **Smart Selector Generation**: Prioritizes reliable selectors (ID → data attributes → unique classes → semantic attributes)
+- **Interactive Tree View**: Shows element hierarchy with syntax highlighting
+- **Keyboard Toggle**: Press `Ctrl+E` or `esc` to activate/deactivate selector mode
 
 ## Installation
 
