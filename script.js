@@ -7,6 +7,7 @@
 // @match        *://*/*
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
+// @license      Apache 2.0
 // ==/UserScript==
 
 (function() {
