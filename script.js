@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Element Selector Tool
 // @namespace    http://tampermonkey.net/
-// @version      6.0
+// @version      6.1
 // @description  Press Ctrl+E to get developer-friendly CSS selectors for any element
 // @author       jamubc
 // @match        *://*/*
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
+// @run-at       document-start
 // @license      Apache 2.0
 // ==/UserScript==
 
@@ -14,6 +15,7 @@
     'use strict';
 
     let active = false, overlay, tooltip, current;
+    let initialized = false;
 
     function getSelector(el) {
         // Priority 1: ID (most reliable)
@@ -244,53 +246,104 @@
         }
 
         const notif = document.createElement('div');
-        notif.textContent = active ? 'Selector mode ON' : 'Selector mode OFF';
+        notif.textContent = active ? 'Selector mode ON (Press Escape to exit)' : 'Selector mode OFF';
         notif.style.cssText = 'position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:10px 15px;border-radius:4px;z-index:2147483647;font-family:Arial';
         document.body.appendChild(notif);
         setTimeout(() => notif.remove(), 2000);
     }
 
-    // Init
-    overlay = document.createElement('div');
-    tooltip = document.createElement('div');
-    document.body.append(overlay, tooltip);
+    // Initialize function
+    function init() {
+        if (initialized) return;
+        initialized = true;
 
-    VM.shortcut.register('c-e', toggle);
+        // Create elements
+        overlay = document.createElement('div');
+        tooltip = document.createElement('div');
+        overlay.style.display = 'none';
+        tooltip.style.display = 'none';
+        document.body.append(overlay, tooltip);
 
-    document.addEventListener('mouseover', e => {
-        if (active && e.target !== overlay && e.target !== tooltip) {
-            current = e.target;
-            highlight(e.target);
-        }
-    });
-
-    // Update position on scroll
-    document.addEventListener('scroll', () => {
-        if (active && current) {
-            highlight(current);
-        }
-    }, true);
-
-    // Update on window resize
-    window.addEventListener('resize', () => {
-        if (active && current) {
-            highlight(current);
-        }
-    });
-
-    document.addEventListener('click', e => {
-        if (active && current) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const selector = getSelector(current);
-            navigator.clipboard?.writeText(selector).then(() => {
-                const notif = document.createElement('div');
-                notif.textContent = 'Copied: ' + selector;
-                notif.style.cssText = 'position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:10px 15px;border-radius:4px;z-index:2147483647;font-family:Arial';
-                document.body.appendChild(notif);
-                setTimeout(() => notif.remove(), 2000);
+        // Register shortcuts
+        if (typeof VM !== 'undefined' && VM.shortcut) {
+            VM.shortcut.register('c-e', toggle);
+            VM.shortcut.register('escape', () => {
+                if (active) {
+                    toggle();
+                }
             });
         }
+
+        // Event listeners
+        document.addEventListener('mouseover', e => {
+            if (active && e.target !== overlay && e.target !== tooltip) {
+                current = e.target;
+                highlight(e.target);
+            }
+        });
+
+        // Update position on scroll
+        document.addEventListener('scroll', () => {
+            if (active && current) {
+                highlight(current);
+            }
+        }, true);
+
+        // Update on window resize
+        window.addEventListener('resize', () => {
+            if (active && current) {
+                highlight(current);
+            }
+        });
+
+        document.addEventListener('click', e => {
+            if (active && current) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const selector = getSelector(current);
+                navigator.clipboard?.writeText(selector).then(() => {
+                    const notif = document.createElement('div');
+                    notif.textContent = 'Copied: ' + selector;
+                    notif.style.cssText = 'position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:10px 15px;border-radius:4px;z-index:2147483647;font-family:Arial';
+                    document.body.appendChild(notif);
+                    setTimeout(() => notif.remove(), 2000);
+                });
+            }
+        });
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        // DOM already loaded, initialize immediately
+        init();
+    }
+
+    // Also reinitialize on navigation changes for SPAs
+    let lastUrl = location.href;
+    new MutationObserver(() => {
+        const url = location.href;
+        if (url !== lastUrl) {
+            lastUrl = url;
+            // Give the page time to render
+            setTimeout(() => {
+                if (!initialized || !document.body.contains(overlay)) {
+                    initialized = false;
+                    init();
+                }
+            }, 500);
+        }
+    }).observe(document, {subtree: true, childList: true});
+
+    // Handle history navigation
+    window.addEventListener('popstate', () => {
+        setTimeout(() => {
+            if (!initialized || !document.body.contains(overlay)) {
+                initialized = false;
+                init();
+            }
+        }, 500);
     });
 })();
