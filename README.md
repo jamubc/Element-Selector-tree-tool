@@ -14,15 +14,9 @@ A powerful userscript that provides developer-friendly CSS selectors for any DOM
 
 ## Installation
 
-### Option 1: Userscript Manager (Recommended)
 1. Install a userscript manager like [Tampermonkey](https://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/)
 2. Click [here](script.js) to install the script
 3. The script will automatically run on all websites
-
-### Option 2: Console (Quick Test)
-1. Copy the contents of [script.js](script.js)
-2. Open your browser's developer console (F12)
-3. Paste and run the script directly in the console
 
 ## Usage
 
