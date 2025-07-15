@@ -2,7 +2,13 @@
 
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-green?logo=tampermonkey)](https://tampermonkey.net/) [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-Compatible-blue?logo=violentmonkey)](https://violentmonkey.github.io/) [![Web Script](https://img.shields.io/badge/Web%20Script-Compatible-orange?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-A powerful userscript that provides developer-friendly CSS selectors for any DOM element with visual highlighting and hierarchical tree view. Tested on Chrome, Firefox/Librewolf & Safari. 
+A powerful userscript that provides developer-friendly CSS selectors for any DOM element with visual highlighting and hierarchical tree view.
+
+<div align="center">
+
+[![Chrome](https://img.shields.io/badge/Chrome-✓-4285F4?logo=googlechrome&logoColor=white)](https://www.google.com/chrome/) [![Firefox](https://img.shields.io/badge/Firefox-✓-FF7139?logo=firefox&logoColor=white)](https://www.mozilla.org/firefox/) [![Safari](https://img.shields.io/badge/Safari-✓-006CFF?logo=safari&logoColor=white)](https://www.apple.com/safari/)
+
+</div> 
 
 <table>
   <tr>
