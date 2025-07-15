@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         Element Selector Tool
 // @namespace    http://tampermonkey.net/
-// @version      6.1
-// @description  Press Ctrl+E to get developer-friendly CSS selectors for any element
+// @version      6.2
+// @description  Press Ctrl+E to get friendly CSS selectors for any element
 // @author       jamubc
 // @match        *://*/*
 // @grant        none
-// @require      https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
 // @run-at       document-start
 // @license      Apache 2.0
+// @inject-into  content
 // ==/UserScript==
 
 (function() {
@@ -248,8 +248,39 @@
         const notif = document.createElement('div');
         notif.textContent = active ? 'Selector mode ON (Press Escape to exit)' : 'Selector mode OFF';
         notif.style.cssText = 'position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:10px 15px;border-radius:4px;z-index:2147483647;font-family:Arial';
-        document.body.appendChild(notif);
-        setTimeout(() => notif.remove(), 2000);
+        
+        // Safari-safe notification appending
+        try {
+            document.body.appendChild(notif);
+        } catch (e) {
+            // Fallback for CSP issues
+            document.documentElement.appendChild(notif);
+        }
+        setTimeout(() => {
+            try {
+                notif.remove();
+            } catch (e) {
+                // Fallback removal
+                if (notif.parentNode) {
+                    notif.parentNode.removeChild(notif);
+                }
+            }
+        }, 2000);
+    }
+
+    // Safari-compatible initialization with CSP handling
+    function safariCompatibleInit() {
+        return new Promise((resolve) => {
+            // Wait for body to be available
+            const waitForBody = () => {
+                if (document.body) {
+                    resolve();
+                } else {
+                    setTimeout(waitForBody, 10);
+                }
+            };
+            waitForBody();
+        });
     }
 
     // Initialize function
@@ -257,22 +288,35 @@
         if (initialized) return;
         initialized = true;
 
-        // Create elements
+        // Create elements with Safari-compatible approach
         overlay = document.createElement('div');
         tooltip = document.createElement('div');
         overlay.style.display = 'none';
         tooltip.style.display = 'none';
-        document.body.append(overlay, tooltip);
-
-        // Register shortcuts
-        if (typeof VM !== 'undefined' && VM.shortcut) {
-            VM.shortcut.register('c-e', toggle);
-            VM.shortcut.register('escape', () => {
-                if (active) {
-                    toggle();
-                }
-            });
+        
+        // Use safer DOM manipulation for Safari
+        try {
+            document.body.appendChild(overlay);
+            document.body.appendChild(tooltip);
+        } catch (e) {
+            // Fallback for CSP issues
+            document.documentElement.appendChild(overlay);
+            document.documentElement.appendChild(tooltip);
         }
+
+        // Register shortcuts with native keyboard events
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+E to toggle
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                toggle();
+            }
+            // Escape to exit
+            if (e.key === 'Escape' && active) {
+                e.preventDefault();
+                toggle();
+            }
+        });
 
         // Event listeners
         document.addEventListener('mouseover', e => {
@@ -302,23 +346,91 @@
                 e.stopPropagation();
 
                 const selector = getSelector(current);
-                navigator.clipboard?.writeText(selector).then(() => {
+                
+                // Try modern clipboard API first, fallback to execCommand
+                const copyToClipboard = async (text) => {
+                    try {
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            await navigator.clipboard.writeText(text);
+                            return true;
+                        }
+                    } catch (err) {
+                        // Fallback to execCommand
+                    }
+                    
+                    // Fallback method for Safari and other browsers
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    textarea.style.pointerEvents = 'none';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    textarea.setSelectionRange(0, 99999);
+                    
+                    try {
+                        const successful = document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        return successful;
+                    } catch (err) {
+                        document.body.removeChild(textarea);
+                        return false;
+                    }
+                };
+                
+                copyToClipboard(selector).then(success => {
                     const notif = document.createElement('div');
-                    notif.textContent = 'Copied: ' + selector;
-                    notif.style.cssText = 'position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:10px 15px;border-radius:4px;z-index:2147483647;font-family:Arial';
-                    document.body.appendChild(notif);
-                    setTimeout(() => notif.remove(), 2000);
+                    notif.textContent = success ? 'Copied: ' + selector : 'Failed to copy: ' + selector;
+                    notif.style.cssText = `position:fixed;top:20px;right:20px;background:${success ? '#4CAF50' : '#f44336'};color:white;padding:10px 15px;border-radius:4px;z-index:2147483647;font-family:Arial`;
+                    
+                    // Safari-safe notification appending
+                    try {
+                        document.body.appendChild(notif);
+                    } catch (e) {
+                        // Fallback for CSP issues
+                        document.documentElement.appendChild(notif);
+                    }
+                    setTimeout(() => {
+                        try {
+                            notif.remove();
+                        } catch (e) {
+                            // Fallback removal
+                            if (notif.parentNode) {
+                                notif.parentNode.removeChild(notif);
+                            }
+                        }
+                    }, 2000);
                 });
             }
         });
     }
 
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+    // Safari-compatible initialization with better CSP handling
+    function safariInit() {
+        // For Safari, we need to be more careful about timing and CSP
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                safariCompatibleInit().then(init);
+            });
+        } else {
+            // DOM already loaded, but wait for body to be ready
+            safariCompatibleInit().then(init);
+        }
+    }
+
+    // Check if we're in Safari and use appropriate initialization
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+    if (isSafari) {
+        // Safari-specific initialization
+        safariInit();
     } else {
-        // DOM already loaded, initialize immediately
-        init();
+        // Standard initialization for other browsers
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     }
 
     // Also reinitialize on navigation changes for SPAs
