@@ -27,7 +27,7 @@ A powerful userscript that provides developer-friendly CSS selectors for any DOM
 
 ## Installation
 
-1. Install a userscript manager like [Tampermonkey](https://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/)
+1. Install a userscript manager like [Tampermonkey](https://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/) or [Userscript](https://apps.apple.com/ca/app/userscripts/id1463298887)
 2. Click [here](https://greasyfork.org/en/scripts/542567-element-selector-tool) to install the script
 3. The script will automatically run on all websites
 
