@@ -1,4 +1,6 @@
-# Element-Selector-tree-tool ([View on Greasyfork](https://greasyfork.org/en/scripts/542567-element-selector-tool))
+# Element-Selector-tree-tool ([Source](https://github.com/jamubc/Element-Selector-tree-tool)] ([View on Greasyfork](https://greasyfork.org/en/scripts/542567-element-selector-tool))
+
+
 
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-green?logo=tampermonkey)](https://tampermonkey.net/)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-Compatible-blue?logo=violentmonkey)](https://violentmonkey.github.io/) [![Web Script](https://img.shields.io/badge/Web%20Script-Compatible-orange?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
