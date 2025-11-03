@@ -5,7 +5,7 @@
 
 A powerful userscript that provides developer-friendly CSS selectors for any DOM element with visual highlighting and a hierarchical tree view.​
 
-Why it’s useful :thinking:: Click any element to copy a precise, unique selector so AI or automation can generate a working userscript faster with fewer mistakes.​
+Why it’s useful: Click any element to copy a precise, unique selector so AI or automation can generate a working userscript faster with fewer mistakes.​
 
 
 
