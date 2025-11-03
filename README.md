@@ -1,8 +1,11 @@
 # Element-Selector-tree-tool ([View on Greasyfork](https://greasyfork.org/en/scripts/542567-element-selector-tool))
 
-[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-green?logo=tampermonkey)](https://tampermonkey.net/) [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-Compatible-blue?logo=violentmonkey)](https://violentmonkey.github.io/) [![Web Script](https://img.shields.io/badge/Web%20Script-Compatible-orange?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-green?logo=tampermonkey)](https://tampermonkey.net/) [!
 
 A powerful userscript that provides developer-friendly CSS selectors for any DOM element with visual highlighting and hierarchical tree view.
+
+May also work with:
+[Violentmonkey](https://img.shields.io/badge/Violentmonkey-Compatible-blue?logo=violentmonkey)](https://violentmonkey.github.io/) [![Web Script](https://img.shields.io/badge/Web%20Script-Compatible-orange?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 <div align="center">
 
@@ -24,6 +27,15 @@ A powerful userscript that provides developer-friendly CSS selectors for any DOM
 - **Smart Selector Generation**: Prioritizes reliable selectors (ID → data attributes → unique classes → semantic attributes)
 - **Interactive Tree View**: Shows element hierarchy with syntax highlighting
 - **Keyboard Toggle**: Press `Ctrl+E` or `esc` to activate/deactivate selector mode
+- **Menu Options**: Change hotkeys and toggle enable/disable directly from the menu
+- **Improved UI**: Unified and enhanced user interface for better usability
+- **High-Resolution Context**: Increased resolution for better element context
+- **CSP-Safe Elements**: Ensures compatibility with Content Security Policies
+- **Shadow DOM Aware**: Resolves true targets via `event.composedPath()` and traverses open `shadowRoot`
+- **Iframe Support**: Runs inside same‑origin iframes (no `@noframes`); overlays are per‑frame
+- **Rich Copy**: Copies CSS plus a compact JSON block (tag/id/classes/data-*/role/text); writes HTML when supported
+- **SPA Aware**: Hooks History API (`pushState`/`replaceState`) and listens to `popstate`/`hashchange` to re‑init
+- **Responsive**: Uses pointer events and passive listeners; cleans up with `AbortController`; positions update via `ResizeObserver`
 
 ## Installation
 
@@ -43,11 +55,12 @@ A powerful userscript that provides developer-friendly CSS selectors for any DOM
 The tool generates selectors in this priority order:
 
 1. **ID**: `#unique-id` (most reliable)
-2. **Data Attributes**: `[data-testid="value"]` (testing/automation friendly)
-3. **Unique Class Combinations**: `button.primary.large` (if selector is unique)
+2. **Data Attributes**: `[data-testid]`, `[data-cy]`, `[data-test]`
+3. **Stable Class Combo**: `button.primary.large` (avoids hashed/dynamic classes)
 4. **ARIA Attributes**: `[role="button"]`, `[aria-label="Close"]`
 5. **Semantic Elements**: `input[name="email"]`, `button[type="submit"]`
-6. **Hierarchical Path**: `#container > div:nth-child(2) > span`
+6. **Contextual :has()** (when applicable): e.g. `label[for="id"]:has(+ input)`
+7. **Hierarchical Path**: nearest‑ID path using `:nth-of-type` when needed
 
 ## Tree View Features
 
@@ -60,9 +73,13 @@ The tool generates selectors in this priority order:
 ## Technical Details
 
 - **Framework**: Pure JavaScript userscript
-- **Dependencies**: @violentmonkey/shortcut for keyboard handling
 - **Compatibility**: Works on all modern browsers
-- **Performance**: Minimal overhead, only active when toggled
+- **Shadow DOM**: Uses `event.composedPath()` and traverses open `shadowRoot`
+- **Iframes**: Script executes per frame; respects same‑origin boundaries
+- **Clipboard**: Async Clipboard API with rich copy; legacy `execCommand` fallback
+- **SPA Hooks**: Patches History API; listens to `popstate`/`hashchange`
+- **Events**: Pointer events (`pointermove/over`) with passive listeners and `AbortController`
+- **Overlay**: Non‑blocking (`pointer-events:none`); repositions via `ResizeObserver`
 
 ## Contributing
 
@@ -71,9 +88,3 @@ Feel free to submit issues or pull requests to improve the tool's selector gener
 ## License
 
 This project is licensed under the Apache License, Version 2.0 with Commons Clause License Condition v1.0 - see the [LICENSE](LICENSE) file for details.
-
-**Commons Clause License Condition v1.0**: The Software is provided to you by the Licensor under the License, as defined below, subject to the following condition.
-
-Without limiting other conditions in the License, the grant of rights under the License will not include, and the License does not grant to you, the right to Sell the Software.
-
-For purposes of the foregoing, "Sell" means practicing any or all of the rights granted to you under the License to provide to third parties, for a fee or other consideration (including without limitation fees for hosting or consulting/ support services related to the Software), a product or service whose value derives, entirely or substantially, from the functionality of the Software.
