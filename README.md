@@ -1,4 +1,4 @@
-# Element-Selector-tree-tool ([Source](https://github.com/jamubc/Element-Selector-tree-tool)] ([View on Greasyfork](https://greasyfork.org/en/scripts/542567-element-selector-tool))
+# Element-Selector-tree-tool ([Source](https://github.com/jamubc/Element-Selector-tree-tool)) ([View on Greasyfork](https://greasyfork.org/en/scripts/542567-element-selector-tool))
 
 
 
