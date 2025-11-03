@@ -1,11 +1,13 @@
 # Element-Selector-tree-tool ([View on Greasyfork](https://greasyfork.org/en/scripts/542567-element-selector-tool))
 
-[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-green?logo=tampermonkey)](https://tampermonkey.net/) [!
+[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-green?logo=tampermonkey)](https://tampermonkey.net/)
+[![Violentmonkey](https://img.shields.io/badge/Violentmonkey-Compatible-blue?logo=violentmonkey)](https://violentmonkey.github.io/) [![Web Script](https://img.shields.io/badge/Web%20Script-Compatible-orange?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-A powerful userscript that provides developer-friendly CSS selectors for any DOM element with visual highlighting and hierarchical tree view.
+A powerful userscript that provides developer-friendly CSS selectors for any DOM element with visual highlighting and a hierarchical tree view.​
 
-May also work with:
-[Violentmonkey](https://img.shields.io/badge/Violentmonkey-Compatible-blue?logo=violentmonkey)](https://violentmonkey.github.io/) [![Web Script](https://img.shields.io/badge/Web%20Script-Compatible-orange?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+Why it’s useful :thinking:: Click any element to copy a precise, unique selector so AI or automation can generate a working userscript faster with fewer mistakes.​
+
+
 
 <div align="center">
 
@@ -23,32 +25,24 @@ May also work with:
 
 ## Features
 
-- **One-Click Copy**: Click any highlighted element to copy its selector to clipboard
-- **Smart Selector Generation**: Prioritizes reliable selectors (ID → data attributes → unique classes → semantic attributes)
+- **One-Click Copy and quick view**: Click any highlighted element to copy its selector to clipboard
 - **Interactive Tree View**: Shows element hierarchy with syntax highlighting
-- **Keyboard Toggle**: Press `Ctrl+E` or `esc` to activate/deactivate selector mode
+- **Smart Selector Generation**: Prioritizes reliable selectors (ID → data attributes → unique classes → semantic attributes)
 - **Menu Options**: Change hotkeys and toggle enable/disable directly from the menu
-- **Improved UI**: Unified and enhanced user interface for better usability
-- **High-Resolution Context**: Increased resolution for better element context
-- **CSP-Safe Elements**: Ensures compatibility with Content Security Policies
-- **Shadow DOM Aware**: Resolves true targets via `event.composedPath()` and traverses open `shadowRoot`
-- **Iframe Support**: Runs inside same‑origin iframes (no `@noframes`); overlays are per‑frame
-- **Rich Copy**: Copies CSS plus a compact JSON block (tag/id/classes/data-*/role/text); writes HTML when supported
-- **SPA Aware**: Hooks History API (`pushState`/`replaceState`) and listens to `popstate`/`hashchange` to re‑init
-- **Responsive**: Uses pointer events and passive listeners; cleans up with `AbortController`; positions update via `ResizeObserver`
 
 ## Installation
 
 1. Install a userscript manager like [Tampermonkey](https://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/) or [Userscript](https://apps.apple.com/ca/app/userscripts/id1463298887)
 2. Click [here](https://greasyfork.org/en/scripts/542567-element-selector-tool) to install the script
 3. The script will automatically run on all websites
+4. **Setup your own hotkey!**:  <img width="382" height="90" alt="image" src="https://github.com/user-attachments/assets/3ce53c7a-20b4-4eb7-8a33-4ec46c9b2f86" />
 
 ## Usage
-
+* hotkey defaults to `Ctrl+E`, you can change this in the menu *
 1. **Activate**: Press `Ctrl+E` on any webpage
-2. **Inspect**: Hover over elements to see their selectors and hierarchy
-3. **Copy**: Click on any highlighted element to copy its CSS selector
-4. **Deactivate**: Press `Ctrl+E` again to exit selector mode
+3. **Inspect**: Hover over elements to see their selectors and hierarchy
+4. **Copy**: Click on any highlighted element to copy its CSS selector
+5. **Deactivate**: Press `Ctrl+E` again to exit selector mode
 
 ## Selector Priority
 
@@ -61,25 +55,6 @@ The tool generates selectors in this priority order:
 5. **Semantic Elements**: `input[name="email"]`, `button[type="submit"]`
 6. **Contextual :has()** (when applicable): e.g. `label[for="id"]:has(+ input)`
 7. **Hierarchical Path**: nearest‑ID path using `:nth-of-type` when needed
-
-## Tree View Features
-
-- **Syntax Highlighting**: Color-coded tags, IDs, classes, and attributes
-- **Hierarchical Display**: Shows parent-child relationships with tree characters
-- **Attribute Preview**: Displays relevant data attributes and ARIA labels
-- **Text Content**: Shows text content for leaf nodes
-- **Smart Truncation**: Handles long attribute values and selectors
-
-## Technical Details
-
-- **Framework**: Pure JavaScript userscript
-- **Compatibility**: Works on all modern browsers
-- **Shadow DOM**: Uses `event.composedPath()` and traverses open `shadowRoot`
-- **Iframes**: Script executes per frame; respects same‑origin boundaries
-- **Clipboard**: Async Clipboard API with rich copy; legacy `execCommand` fallback
-- **SPA Hooks**: Patches History API; listens to `popstate`/`hashchange`
-- **Events**: Pointer events (`pointermove/over`) with passive listeners and `AbortController`
-- **Overlay**: Non‑blocking (`pointer-events:none`); repositions via `ResizeObserver`
 
 ## Contributing
 
